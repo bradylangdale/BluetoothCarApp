@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:foregroundTint="#FFFFFF"
+    tools:context=".MainActivity">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#1E1E1E"
+        android:scaleType="centerInside"
+        app:srcCompat="@drawable/rocket"
+        tools:layout_editor_absoluteX="-31dp"
+        tools:layout_editor_absoluteY="0dp" />
+
+    <Button
+        android:id="@+id/btnGet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="299dp"
+        android:layout_marginBottom="64dp"
+        android:backgroundTint="#303030"
+        android:text="Get Paired Devices"
+        android:textColor="#FFFFFF"
+        app:iconTint="@color/material_dynamic_neutral40"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imageView" />
+
+    <ListView
+        android:id="@+id/deviceList"
+        android:layout_width="584dp"
+        android:layout_height="194dp"
+        android:backgroundTint="#303030"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/btnGet"
+        app:layout_constraintHorizontal_bias="0.9"
+        app:layout_constraintStart_toStartOf="@+id/btnGet"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/btnForward"
+        android:layout_width="135dp"
+        android:layout_height="82dp"
+        android:layout_marginStart="51dp"
+        android:layout_marginTop="251dp"
+        android:layout_marginEnd="757dp"
+        android:layout_marginBottom="112dp"
+        android:backgroundTint="#66303030"
+        android:text="Forward"
+        android:textColor="#FFFFFF"
+        app:iconTint="@color/material_dynamic_neutral40"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView"
+        app:layout_constraintEnd_toEndOf="@+id/imageView"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/imageView"
+        app:layout_constraintTop_toTopOf="@+id/imageView"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <Button
+        android:id="@+id/btnReverse"
+        android:layout_width="135dp"
+        android:layout_height="82dp"
+        android:layout_marginStart="51dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="757dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="#66303030"
+        android:text="Reverse"
+        android:textColor="#FFFFFF"
+        app:iconTint="@color/material_dynamic_neutral40"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView"
+        app:layout_constraintEnd_toEndOf="@+id/imageView"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/btnForward" />
+
+    <Button
+        android:id="@+id/btnLeft"
+        android:layout_width="135dp"
+        android:layout_height="82dp"
+        android:layout_marginStart="621dp"
+        android:layout_marginTop="268dp"
+        android:layout_marginEnd="158dp"
+        android:backgroundTint="#66303030"
+        android:text="Left"
+        android:textColor="#FFFFFF"
+        app:iconTint="@color/material_dynamic_neutral40"
+        app:layout_constraintEnd_toEndOf="@+id/imageView"
+        app:layout_constraintStart_toStartOf="@+id/imageView"
+        app:layout_constraintTop_toTopOf="@+id/imageView" />
+
+    <Button
+        android:id="@+id/btnRight"
+        android:layout_width="135dp"
+        android:layout_height="82dp"
+        android:layout_marginStart="19dp"
+        android:layout_marginTop="269dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="60dp"
+        android:backgroundTint="#66303030"
+        android:text="Right"
+        android:textColor="#FFFFFF"
+        app:iconTint="@color/material_dynamic_neutral40"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btnLeft"
+        app:layout_constraintTop_toTopOf="@+id/imageView"
+        app:layout_constraintVertical_bias="0.0" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
