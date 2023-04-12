@@ -25,6 +25,8 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.google.common.primitives.Bytes;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -66,9 +68,7 @@ public class MainActivity extends AppCompatActivity {
     OutputStream mmOutputStream;
     InputStream mmInputStream;
     Thread workerThread;
-    ByteBuffer readBuffer;
-    byte[] startBytes = "VFM".getBytes();
-    byte[] endBytes = "VED".getBytes();
+    byte[] readBuffer;
     byte[] imageBytes;
     volatile boolean stopWorker;
 
@@ -284,10 +284,10 @@ public class MainActivity extends AppCompatActivity {
 
         stopWorker = false;
 
-        readBuffer = ByteBuffer.allocate(32768*64);
+        readBuffer = new byte[2048];
 
         ImageView imageView = (ImageView) findViewById(R.id.imageView);
-        imageBytes = new byte[8192];
+        imageBytes = new byte[2048];
 
         workerThread = new Thread(new Runnable()
         {
@@ -298,30 +298,16 @@ public class MainActivity extends AppCompatActivity {
                     try
                     {
                         int bytesAvailable = mmInputStream.available();
-                        int bytesSinceStartTag = 0;
                         if (bytesAvailable > 0) {
-                            Log.d("IMAGING", "Available: " + bytesAvailable);
-                            Log.d("IMAGING", "Length: " + readBuffer.position());
-                            readBuffer.put(mmInputStream.readNBytes(bytesAvailable));
-                            bytesSinceStartTag += bytesAvailable;
+                            readBuffer = Bytes.concat(readBuffer, mmInputStream.readNBytes(bytesAvailable));
 
-                            int[] startTags = allIndicesOf(readBuffer, startBytes);
-                            int[] endTags = allIndicesOf(readBuffer, endBytes);
+                            int startTag = Bytes.indexOf(readBuffer, "VFM".getBytes());
+                            int endTag = Bytes.indexOf(readBuffer, "VED".getBytes());
 
-                            int startTag = -1;
-                            int endTag = -1;
-
-                            if (startTags.length != 0) startTag = startTags[0];
-                            if (endTags.length != 0) endTag = endTags[0];
-
-                            Log.d("IMAGING", "Start: " + startTag + ", End: " + endTag);
                             if (startTag != -1 && endTag != -1) {
                                 if (startTag < endTag) {
-                                    readBuffer.get(imageBytes, startTag + 3, endTag - (startTag + 3));
-                                    Log.d("IMAGE", Arrays.toString(imageBytes));
-                                    //readBuffer.clear();
-                                    //readBuffer.position(0);
-                                    bytesSinceStartTag = 0;
+                                    imageBytes = Arrays.copyOfRange(readBuffer, startTag + 3, endTag);
+                                    readBuffer = Arrays.copyOfRange(readBuffer, endTag + 3, readBuffer.length);
 
                                     Bitmap bmp = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
 
@@ -334,19 +320,10 @@ public class MainActivity extends AppCompatActivity {
                                     }
                                 } else
                                 {
-                                    //bytesSinceStartTag += bytesAvailable;
-                                    //readBuffer.position(startTag);
-                                    ///readBuffer.compact();
-                                    //readBuffer.position(bytesSinceStartTag);
+                                    readBuffer = Arrays.copyOfRange(readBuffer, endTag + 3, readBuffer.length);
                                 }
                             } else if (startTag != -1) {
-                                //bytesSinceStartTag += bytesAvailable;
-                                //readBuffer.position(startTag);
-                                //readBuffer.compact();
-                                //readBuffer.position(bytesSinceStartTag);
-                            } else {
-                                bytesSinceStartTag = 0;
-                                //readBuffer.flip();
+                                readBuffer = Arrays.copyOfRange(readBuffer, startTag, readBuffer.length);
                             }
                         }
                     }
@@ -374,7 +351,7 @@ public class MainActivity extends AppCompatActivity {
         if (b.length == 0) {
             return new int[0];
         }
-        return IntStream.rangeClosed(0, buf.limit() - b.length)
+        return IntStream.rangeClosed(buf.position(), buf.limit() - b.length)
                 .filter(i -> IntStream.range(0, b.length).allMatch(j -> buf.get(i + j) == b[j]))
                 .toArray();
     }
